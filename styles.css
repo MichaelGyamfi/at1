@@ -1,0 +1,28 @@
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  #quiz-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  #options-container button {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  #feedback {
+    margin-top: 10px;
+  }
+  
+  #next-btn {
+    display: none;
+  }
+  
+  #result-container {
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center;
+  }
+  
