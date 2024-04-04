@@ -1,66 +1,68 @@
+// Sample questions array
 const questions = [
-  { question: "What is the past tense of 'run'?", options: ["ran", "runned", "running", "run"], answer: "ran" },
-  { question: "What is the past participle of 'swim'?", options: ["swum", "swam", "swimming", "swim"], answer: "swum" },
-  // Add more questions here...
+  {
+    question: "What is the past tense of 'eat'?",
+    options: ["eated", "ate", "eat", "eating"],
+    answer: "ate",
+    explanation: "The correct answer is 'ate' which is the past tense of 'eat'."
+  },
+  // Add more questions as needed
 ];
 
 let currentQuestionIndex = 0;
 let score = 0;
 
+const questionContainer = document.getElementById('question-container');
+const feedbackContainer = document.getElementById('feedback-container');
+const scoreContainer = document.getElementById('score-container');
+const scoreDisplay = document.getElementById('score');
+const retakeButton = document.getElementById('retake-btn');
+
 function displayQuestion() {
-  const questionDisplay = document.getElementById("question-display");
-  const optionsContainer = document.getElementById("options-container");
-
   const currentQuestion = questions[currentQuestionIndex];
-  questionDisplay.textContent = currentQuestion.question;
-  optionsContainer.innerHTML = "";
-
-  currentQuestion.options.forEach(option => {
-    const button = document.createElement("button");
-    button.textContent = option;
-    button.style.display = "block";
-    button.onclick = () => checkAnswer(option);
-    optionsContainer.appendChild(button);
-  });
+  questionContainer.innerHTML = `
+    <p>${currentQuestion.question}</p>
+    ${currentQuestion.options.map((option, index) => `
+      <button class="button" onclick="checkAnswer(${index})">${option}</button>
+    `).join('')}
+  `;
 }
 
-function checkAnswer(selectedOption) {
+function checkAnswer(selectedIndex) {
   const currentQuestion = questions[currentQuestionIndex];
-  const feedback = document.getElementById("feedback");
+  const selectedOption = currentQuestion.options[selectedIndex];
 
   if (selectedOption === currentQuestion.answer) {
     score++;
-    feedback.textContent = "Correct!";
+    feedbackContainer.innerHTML = `<p>Correct! ${currentQuestion.explanation}</p>`;
   } else {
-    feedback.textContent = "Incorrect. The correct answer is: " + currentQuestion.answer;
+    feedbackContainer.innerHTML = `<p>Incorrect! ${currentQuestion.explanation}</p>`;
   }
 
-  document.getElementById("next-btn").style.display = "block";
-  document.getElementById("options-container").querySelectorAll("button").forEach(button => button.disabled = true);
-}
-
-function nextQuestion() {
   currentQuestionIndex++;
+
   if (currentQuestionIndex < questions.length) {
     displayQuestion();
-    document.getElementById("next-btn").style.display = "none";
-    document.getElementById("options-container").querySelectorAll("button").forEach(button => button.disabled = false);
-    document.getElementById("feedback").textContent = "";
   } else {
-    showResult();
+    showScore();
   }
 }
 
-function showResult() {
-  document.getElementById("quiz-container").style.display = "none";
-  document.getElementById("result-container").style.display = "block";
-  document.getElementById("score").textContent = score + "/" + questions.length;
+function showScore() {
+  questionContainer.style.display = 'none';
+  feedbackContainer.style.display = 'none';
+  scoreDisplay.textContent = score;
+  scoreContainer.style.display = 'block';
 }
 
-function retakeTest() {
+retakeButton.addEventListener('click', () => {
   currentQuestionIndex = 0;
   score = 0;
   displayQuestion();
-  document.getElementById("quiz-container").style.display = "block";
-  document.getElementById("result-container").style.display = "none";
-}
+  questionContainer.style.display = 'block';
+  feedbackContainer.style.display = 'block';
+  scoreContainer.style.display = 'none';
+});
+
+// Initial display of the first question
+displayQuestion();
